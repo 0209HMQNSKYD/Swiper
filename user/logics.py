@@ -1,6 +1,8 @@
 #author:HMQ
 # -*- coding: utf-8 -*-
 import os
+
+from social.models import Swipe
 from  swiper.settings import MEDIA_ROOT,BASE_DIR
 from lib.http import render_json
 
@@ -16,3 +18,4 @@ def upload_avatar_to_server(uid,avatar):
         # 分块写入
         for chunk in avatar.chunks():
             fp.write(chunk)
+

@@ -49,7 +49,7 @@ class Profile(models.Model,ModelMixin):
     min_distance = models.IntegerField(default=1,verbose_name="最小查找范围")
     max_distance = models.IntegerField(default=10,verbose_name="最大查找范围")
     min_dating_age = models.IntegerField(default=18,verbose_name="最小交友年龄")
-    max_dating_age = models.IntegerField(default=60,verbose_name="最大交友年龄")
+    max_dating_age = models.IntegerField(default=55,verbose_name="最大交友年龄")
     dating_sex = models.CharField(max_length=8,choices=SEX,verbose_name="匹配的性别")
     vibration = models.BooleanField(default=True,verbose_name="开启震动")
     only_matche = models.BooleanField(default=True,verbose_name="不让为匹配的人看我的相册")

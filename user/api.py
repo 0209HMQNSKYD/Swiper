@@ -47,15 +47,12 @@ def submit_vcode(request):
 
 def get_profile(request):
     """获取个人资料"""
-    uid = request.session.get("uid")
-    print(uid)
-    if uid != None:
-        user = User.objects.get(id=uid)
+    user = request.user
 
-        #获取个人资料，没有则自动创建
-        profile = user.profile
+    #获取个人资料，没有则自动创建
+    profile = user.profile
 
-        return render_json(profile.to_string())
+    return render_json(profile.to_string())
 
 
 
@@ -85,11 +82,11 @@ def upload_avtar(request):
     if not request.method == "POST":
         return render_json("request method error",error.REQUEST_ERROR)
 
+    # 获取该头像的用户
+    user = request.user
     #获取上传的头像
     avatar = request.FILES.get("avatar")
-    #获取该头像的用户id
-    uid = request.session.get("uid")
     #把头像保存到本地路径
-    upload_avatar_to_server(uid,avatar)
+    upload_avatar_to_server(user.id,avatar)
 
     return render_json("uppoad success")

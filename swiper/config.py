@@ -10,3 +10,8 @@ YZX_SMS_PARAMS ={
     "param":None,
     "mobile":None,
 }
+
+
+
+#返回次数
+REGRET_TIMES = 3
