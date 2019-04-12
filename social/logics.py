@@ -1,11 +1,12 @@
 import datetime
 
 from common import keys
+from lib.http import render_json
 from user.models import User
 from social.models import Swipe, Friend
 from django.core.cache import cache
 from swiper.config import REGRET_TIMES
-
+from common import error
 
 def get_rcmd_users(user):
     '''
@@ -83,21 +84,33 @@ def regret(user):
         #now_second为一天剩余的秒：一天的秒数-当前的秒数
         now_second = now_time.hour*3600+now_time.minute*60+now_time.second
         cache.set(key,86400-now_second)
+        try:
+        #反悔操作，删除好友关系
+            #获取最后一次该用户滑动的记录，
+            record = Swipe.objects.filter(uid=user.id).latest("stime")
 
-    #反悔操作，删除好友关系
-        #获取最后一次该用户滑动的记录，
-        record = Swipe.objects.filter(uid=user.id).latest("stime")
+        #查询你们现在是否是好友，如果是则解除好友
 
-    #查询你们现在是否是好友，如果是则解除好友
+            #删除好友关系
+            Friend.break_up(uid1=user.id,uid2=record.sid)
+            #删除滑动记录
+            record.delete()
+        except Swipe.DoesNotExist:
+            raise error.MODEL_ERROR("model error")
 
-        #删除好友关系
-        Friend.break_up(uid1=user.id,uid2=record.sid)
-        Friend.break_up(uid2=user.id,uid1=record.sid)
-
-        #删除滑动记录
-        record.delete()
-
-        return True
     else:
-        return False
+        raise error.REACH_REGRET_LIMIT("reach regret limit")
 
+def get_friend_info(user,fid):
+    friends = user.friends
+    flist = [friend.to_string() for friend in friends]
+
+    if fid not in flist:
+        raise error.NO_THIS_USER("no this friend")
+    users = User.objects.filter(id=fid)
+
+    if not users:
+        raise error.NO_THIS_USER("no this user")
+
+    user = users.first()
+    return user

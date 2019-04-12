@@ -21,7 +21,7 @@ def get_rcmd_user(request):
 def like(request):
     # 判断是否是post请求
     if not request.method == "POST":
-        return render_json("request method error", error.REQUEST_ERROR)
+        return render_json("request method error", error.REQUEST_ERROR.code)
 
     sid = int(request.POST.get("sid"))
 
@@ -32,7 +32,7 @@ def like(request):
 def superlike(request):
     # 判断是否是post请求
     if not request.method == "POST":
-        return render_json("request method error", error.REQUEST_ERROR)
+        return render_json("request method error", error.REQUEST_ERROR.code)
 
     sid = int(request.POST.get("sid"))
 
@@ -43,7 +43,7 @@ def superlike(request):
 def dislike(request):
     # 判断是否是post请求
     if not request.method == "POST":
-        return render_json("request method error", error.REQUEST_ERROR)
+        return render_json("request method error", error.REQUEST_ERROR.code)
 
     sid = int(request.POST.get("sid"))
 
@@ -52,15 +52,21 @@ def dislike(request):
     return render_json(None)
 
 def regret(request):
-    breaked = logics.regret(request.user)
-
-    render_json({"regret":breaked})
+    logics.regret(request.user)
+    return render_json(" regret OK")
 
 def get_friends(request):
-    pass
-
+    friends = request.user.friends
+    flist = [friend.to_string() for friend in friends]
+    return  render_json(flist)
 
 def get_friend_info(request):
-    pass
+    # 判断是否是post请求
+    if not request.method == "POST":
+        return render_json("request method error", error.REQUEST_ERROR.code)
 
+    fid = int(request.POST.get("fid"))
 
+    user = logics.get_friend_info(request.user,fid)
+
+    return render_json(user.to_string())

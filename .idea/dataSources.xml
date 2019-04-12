@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="c0fc98de-ecda-47f4-9c85-0be7f5d3a406">
+    <data-source source="LOCAL" name="db" uuid="28f01d18-7b26-4714-b9e9-5b9dc8680c5d">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\python_stage4\day04\code\Swiper\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\python_stage4\day05\code\Swiper\db.sqlite3</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
       </driver-properties>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class Swipe(models.Model):
@@ -33,9 +34,21 @@ class Friend(models.Model):
     @classmethod
     def make_friend(cls,uid1,uid2):
         uid1,uid2 = (uid1,uid2) if uid1 > uid2 else (uid2,uid1)
-        cls.objects.create(uid1,uid2)
+        cls.objects.create(uid1=uid1,uid2=uid2)
 
     @classmethod
     def break_up(cls,uid1,uid2):
+        uid1, uid2 = (uid1, uid2) if uid1 > uid2 else (uid2, uid1)
         #删除好友关系
         cls.objects.filter(uid1=uid1,uid2=uid2).delete()
+
+    @classmethod
+    def get_friends_list(cls,uid):
+        friends = cls.objects.filter(Q(uid1=uid)|Q(uid2=uid))
+        fid_list = []
+        for friend in friends:
+            if friend.uid1 == uid:
+                fid_list.append(friend.uid2)
+            else:
+                fid_list.append(friend.uid1)
+        return fid_list

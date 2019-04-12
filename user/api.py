@@ -14,7 +14,7 @@ from user.logics import upload_avatar_to_server
 def submit_phone(request):
     """获取短信验证码"""
     if not request.method == "POST":
-        return render_json("request method error",code=error.REQUEST_ERROR)
+        return render_json("request method error",code=error.REQUEST_ERROR.code)
 
     phone = request.POST.get("phone")
 
@@ -27,7 +27,7 @@ def submit_vcode(request):
     """通过验证码登录注册"""
     #判断是否是post请求
     if not request.method=="POST":
-        return render_json("request method error",error.REQUEST_ERROR)
+        return render_json("request method error",error.REQUEST_ERROR.code)
 
     phone = request.POST.get("phone")
     # 获取手机收到的验证码
@@ -43,7 +43,7 @@ def submit_vcode(request):
 
         return  render_json(user.to_string())
     else:
-        return render_json("verify code error",error.VCODE_ERROR)
+        return render_json("verify code error",error.VCODE_ERROR.code)
 
 def get_profile(request):
     """获取个人资料"""
@@ -59,7 +59,7 @@ def get_profile(request):
 def set_profile(request):
     """修改个人资料"""
     if not request.method == "POST":
-        return render_json("request method error",error.REQUEST_ERROR)
+        return render_json("request method error",error.REQUEST_ERROR.code)
 
     uid = request.session.get("uid")
 
@@ -73,14 +73,14 @@ def set_profile(request):
         profile.save()
         return render_json("modify profile success")
     else:
-        return render_json(profile_form.errors,error.FORM_VALID_ERROR)
+        return render_json(profile_form.errors,error.FORM_VALID_ERROR.code)
 
 
 
 def upload_avtar(request):
     """头像上传"""
     if not request.method == "POST":
-        return render_json("request method error",error.REQUEST_ERROR)
+        return render_json("request method error",error.REQUEST_ERROR.code)
 
     # 获取该头像的用户
     user = request.user

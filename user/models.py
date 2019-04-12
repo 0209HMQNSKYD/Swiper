@@ -2,6 +2,8 @@ import datetime
 from django.db import models
 from lib.orm import ModelMixin
 from django.utils.functional import cached_property
+from social.models import Friend
+
 
 class User(models.Model,ModelMixin):
 
@@ -39,6 +41,12 @@ class User(models.Model,ModelMixin):
             self._profile = profile
         return self._profile
 
+    @property
+    def friends(self):
+        if not hasattr(self,"_friends"):
+            userid_list = Friend.get_friends_list(self.id)
+            self._friend  =User.objects.filter(id__in=userid_list)
+        return self._friend
 
 class Profile(models.Model,ModelMixin):
     SEX = (

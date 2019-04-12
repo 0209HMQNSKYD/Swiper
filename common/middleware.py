@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from django.utils.deprecation import MiddlewareMixin
-
 from common import error
 from user.models import User
 from lib.http import render_json
@@ -21,9 +20,18 @@ class AuthMiddleware(MiddlewareMixin):
 
         uid = request.session.get("uid")
         if not uid:
-            return render_json("user not login",error.USER_NOT_LOGIN)
+            return render_json("user not login",error.USER_NOT_LOGIN.code)
         try:
             user = User.objects.get(id=uid)
             request.user = user
         except User.DoesNotExist:
-            return render_json("no this user",error.NO_THIS_USER)
+            return render_json("no this user",error.NO_THIS_USER.code)
+
+
+class ExceptionHandlerMiddleware(MiddlewareMixin):
+    def process_exception(self,request,exception):
+
+        if isinstance(exception,error.LogicError):
+
+            return render_json(exception.data,exception.code)
+
