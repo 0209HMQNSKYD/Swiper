@@ -24,6 +24,11 @@ class Swipe(models.Model):
     def is_someone_like_you(cls, uid,sid):
         return cls.objects.filter(flag__in=["like","superlike"], uid=uid, sid=sid).exists()
 
+    @classmethod
+    def who_liked_me(cls,uid):
+        liked_list = cls.objects.filter(sid=uid)
+        user_who_like_me_list = [liked.uid for liked in liked_list]
+        return user_who_like_me_list
 
 class Friend(models.Model):
 

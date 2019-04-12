@@ -114,3 +114,9 @@ def get_friend_info(user,fid):
 
     user = users.first()
     return user
+
+
+def get_who_liked_me(user):
+    liked_user_ids = Swipe.who_liked_me(user.id)
+    users = User.objects.filter(id__in=liked_user_ids)
+    return users

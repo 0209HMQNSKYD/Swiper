@@ -34,5 +34,6 @@ urlpatterns = [
     url(r'social/api/regret',social_api.regret),
     url(r'social/api/get_friends',social_api.get_friends),
     url(r'social/api/get_friend_info',social_api.get_friend_info),
+    url(r'social/api/get_who_liked_me',social_api.get_who_liked_me),
 
 ]

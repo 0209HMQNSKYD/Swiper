@@ -3,6 +3,7 @@ from django.db import models
 from lib.orm import ModelMixin
 from django.utils.functional import cached_property
 from social.models import Friend
+from vip.models import Vip
 
 
 class User(models.Model,ModelMixin):
@@ -20,6 +21,7 @@ class User(models.Model,ModelMixin):
     avatar = models.CharField(max_length=20,verbose_name="个人形象")
     location = models.CharField(max_length=20,verbose_name="常居地")
 
+    vip_id = models.IntegerField(default=1)
 
     @cached_property
     def age(self):
@@ -47,6 +49,12 @@ class User(models.Model,ModelMixin):
             userid_list = Friend.get_friends_list(self.id)
             self._friend  =User.objects.filter(id__in=userid_list)
         return self._friend
+
+    @property
+    def vip(self):
+        if not hasattr(self,"_vip"):
+            self._vip = Vip.objects.get(id=self.vip_id)
+        return self._vip
 
 class Profile(models.Model,ModelMixin):
     SEX = (
